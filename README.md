@@ -1,13 +1,12 @@
 # Jagrata-24
-# 🧪 DetectorConstruction – Grandmaster-Level Geant4 Detector Builder
+# DetectorConstruction – Geant4 Detector Builder
 
-This module defines a **fully dynamic and extensible detector geometry** for a **Relativistic Muon Lifetime Measurements Experiment** using Geant4. It features optimized material handling, modular 3D construction, sensitive detector integration, and advanced visualization/validation features — all at runtime!
+This module defines a fully dynamic and extensible detector geometry for a Relativistic Muon Lifetime Measurements Experiment using Geant4. It features optimized material handling, modular 3D construction, sensitive detector integration, and advanced visualization/validation features — all at runtime!
 
----
 
-## 🔍 Features
+## Features
 
-### ✅ Full Detector Geometry
+### Full Detector Geometry
 
 - Scintillators (6 units)
 - MRPCs (Multi-gap Resistive Plate Chambers) ×2
@@ -16,7 +15,7 @@ This module defines a **fully dynamic and extensible detector geometry** for a *
 - Trigger Volume
 - Outer `DarkBox` container and internal assembly
 
-### 🧪 Smart Material System
+### Smart Material System
 
 - Uses **G4NistManager** for standard materials
 - **Composite material creation** for:
@@ -35,7 +34,8 @@ Control geometry directly from Geant4 macros or terminal:
 /detector/resetSensitiveDetectors
 /detector/updateGeometry
 /detector/toggleVis
-🛡️ Sensitive Detector Integration
+
+Sensitive Detector Integration
 Automatically attaches MyAdvancedSensitiveDetector to:
 
 All scintillators
@@ -48,25 +48,25 @@ Trigger
 
 PMTs and SiPMs
 
-🎨 Advanced Visualization
+Advanced Visualization
 Custom G4VisAttributes for intuitive visual debugging
 
 Interactive toggleVis to show/hide all volumes
 
 Colors assigned by type for clarity (e.g., MRPC = Blue, Scintillator = Green)
 
-🚫 Overlap Checking
+Overlap Checking
 Built-in overlap detection
 
 Configurable thresholds (fOverlapTolerance, fOverlapMaxChecks)
 
-📄 Geometry Dump
+Geometry Dump
 Saves detailed geometry report to:
 
 Copy
 Edit
 geometry_dump.txt
-📦 Volume Summary
+Volume Summary
 Volume	Dimensions (cm³)
 Scintillator1–6	20 × 10 × 0.5
 MRPC1 & MRPC2	30 × 30 × 0.5
@@ -75,7 +75,7 @@ PMT	Diameter 5 × Thickness 1
 SiPM	0.5 × 0.5 × 0.1
 DarkBox	100 × 50 × 100
 Trigger	10 × 10 × 0.5
-📁 File Structure
+File Structure
 DetectorConstruction.hh – Class header
 
 DetectorConstruction.cc – Main implementation
@@ -84,7 +84,7 @@ MyAdvancedSensitiveDetector.hh/.cc – Custom sensitive detector class (required
 
 geometry_dump.txt – Output from advanced geometry info
 
-🧠 Ideal For
+Ideal For
 Muon lifetime & decay studies
 
 Time-of-flight (ToF) experiments
@@ -95,7 +95,7 @@ STEM education modules
 
 Modular simulation pipelines with frequent geometry updates
 
-⚡ Getting Started
+Getting Started
 Place DetectorConstruction.hh and .cc in your Geant4 project.
 
 Ensure you have MyAdvancedSensitiveDetector implemented.
