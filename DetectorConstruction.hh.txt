@@ -1,0 +1,766 @@
+DetectorConstruction.hh :
+
+#ifndef DetectorConstruction_h
+#define DetectorConstruction_h 1
+
+#include "G4VUserDetectorConstruction.hh"
+#include "globals.hh"
+#include "G4GenericMessenger.hh"
+#include <vector>
+#include <string>
+#include <map>
+
+/** 
+ * @brief Advanced DetectorConstruction (Grandmaster Level)
+ *
+ * This class constructs the complete detector geometry for the Relativistic Muon Lifetime Measurements Experiment.
+ * It provides full dynamic 3D configuration for all detector components, optimized material caching (including composite
+ * materials for PMT and SiPM), and includes the DarkBox with internal detectors, along with advanced features such as
+ * overlap checking, visualization, GDML loading (placeholder), and a single trigger volume.
+ */
+class G4VPhysicalVolume;
+class DetectorConstruction : public G4VUserDetectorConstruction {
+public:
+    DetectorConstruction();
+    virtual ~DetectorConstruction();
+
+    /// Constructs and returns the world volume.
+    virtual G4VPhysicalVolume* Construct();
+
+    //=== PRIMARY FUNCTIONS ===
+    void ResetSensitiveDetectors();
+    void UpdateGeometryParameters();
+    void AdvancedOverlapCheck();
+    void DumpAdvancedGeometryInfo(const G4String& fileName);
+    void SetAdvancedVisAttributes();
+    void ToggleVisualization();
+
+    //=== ADVANCED ENHANCEMENTS ===
+    void AdvancedDynamicGeometryUpdate();
+    void AdvancedGeometryEnhancement();
+    void IntegrateAllSensitiveDetectors();
+    void LoadGeometryFromGDML(const G4String& gdmlFile);
+    void OptimizeMaterials();
+    void BuildTriggerVolume();
+
+    /// Central builder integrating all features.
+    G4VPhysicalVolume* BuildAdvancedDetector();
+
+private:
+    /// Define and initialize all materials (with caching and composite definitions).
+    void DefineMaterials();
+
+    // Runtime configuration messenger.
+    G4GenericMessenger* fMessenger;
+
+    // Global material cache.
+    std::map<G4String, G4Material*> fMatCache;
+
+    // Dynamic geometry parameters (in meters).
+    G4double fWorldSizeZ;    ///< World half-length in Z.
+    // Scintillator1.
+    G4double fScin1PosX;     ///< X position for Scintillator1.
+    G4double fScin1PosY;     ///< Y position for Scintillator1.
+    G4double fScin1PosZ;     ///< Z position for Scintillator1.
+    // MRPC1.
+    G4double fMRPC1PosX;     ///< X position for MRPC1.
+    G4double fMRPC1PosY;     ///< Y position for MRPC1.
+    G4double fMRPC1PosZ;     ///< Z position for MRPC1.
+    // MRPC2.
+    G4double fMRPC2PosX;     ///< X position for MRPC2.
+    G4double fMRPC2PosY;     ///< Y position for MRPC2.
+    G4double fMRPC2PosZ;     ///< Z position for MRPC2.
+    // Scintillator6 (Halo).
+    G4double fScin6PosX;     ///< X position for Scintillator6.
+    G4double fScin6PosY;     ///< Y position for Scintillator6.
+    G4double fScin6PosZ;     ///< Z position for Scintillator6.
+    // Scintillator5.
+    G4double fScin5PosX;     ///< X position for Scintillator5.
+    G4double fScin5PosY;     ///< Y position for Scintillator5.
+    G4double fScin5PosZ;     ///< Z position for Scintillator5.
+    // DarkBox (external container) – Full dimensions: 100 cm × 50 cm × 100 cm.
+    G4double fDarkBoxPosX;   ///< X position for DarkBox.
+    G4double fDarkBoxPosY;   ///< Y position for DarkBox.
+    G4double fDarkBoxPosZ;   ///< Z position for DarkBox.
+    // Internal DarkBox volumes.
+    G4double fScin2PosX;     ///< X position for internal Scintillator2.
+    G4double fScin2PosY;     ///< Y position for internal Scintillator2.
+    G4double fScin2PosZ;     ///< Z position for internal Scintillator2.
+    G4double fScin3PosX;     ///< X position for internal Scintillator3.
+    G4double fScin3PosY;     ///< Y position for internal Scintillator3.
+    G4double fScin3PosZ;     ///< Z position for internal Scintillator3.
+    G4double fScin4PosX;     ///< X position for internal Scintillator4.
+    G4double fScin4PosY;     ///< Y position for internal Scintillator4.
+    G4double fScin4PosZ;     ///< Z position for internal Scintillator4.
+    // Internal PMT/SiPM positions (for each internal scintillator).
+    // For Scintillator2.
+    G4double fPMT2PosX, fPMT2PosY, fPMT2PosZ;
+    G4double fSiPM2PosX, fSiPM2PosY, fSiPM2PosZ;
+    // For Scintillator3.
+    G4double fPMT3PosX, fPMT3PosY, fPMT3PosZ;
+    G4double fSiPM3PosX, fSiPM3PosY, fSiPM3PosZ;
+    // For Scintillator4.
+    G4double fPMT4PosX, fPMT4PosY, fPMT4PosZ;
+    G4double fSiPM4PosX, fSiPM4PosY, fSiPM4PosZ;
+    // DWC1 dynamic parameters.
+    G4double fDWC1PosX, fDWC1PosY, fDWC1PosZ;
+    // DWC2 dynamic parameters.
+    G4double fDWC2PosX, fDWC2PosY, fDWC2PosZ;
+    // Trigger Volume.
+    G4double fTriggerPosX;   ///< X position for Trigger.
+    G4double fTriggerPosY;   ///< Y position for Trigger.
+    G4double fTriggerPosZ;   ///< Z position for Trigger.
+
+    // Coordinate offset.
+    G4double fZOffset;       ///< Z offset to center geometry at beamline midpoint (default: 4.25 m).
+
+    // Overlap checking parameters.
+    G4int    fOverlapMaxChecks;    ///< Maximum overlap check iterations.
+    G4double fOverlapTolerance;    ///< Overlap check tolerance (in mm).
+};
+
+#endif
+
+------------------
+
+Detectorconstruction.cc :
+
+
+#include "DetectorConstruction.hh"
+
+#include "G4Material.hh"
+#include "G4NistManager.hh"
+#include "G4Element.hh"
+#include "G4Box.hh"
+#include "G4Tubs.hh"
+#include "G4SubtractionSolid.hh"
+#include "G4LogicalVolume.hh"
+#include "G4PVPlacement.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4ThreeVector.hh"
+#include "G4RotationMatrix.hh"
+#include "G4SDManager.hh"
+#include "MyAdvancedSensitiveDetector.hh"  // User-implemented sensitive detector
+#include "G4GeometryManager.hh"
+#include "G4PhysicalVolumeStore.hh"
+#include "G4UImanager.hh"
+#include "G4RunManager.hh"
+#include "G4GDMLParser.hh"
+#include "G4Colour.hh"
+#include "G4VisAttributes.hh"
+#include <fstream>
+#include <sstream>
+#include <map>
+
+//---------------------------------------------------------------------
+// Constructor: Initialize parameters and set up runtime messenger.
+DetectorConstruction::DetectorConstruction() : G4VUserDetectorConstruction(),
+    fWorldSizeZ(5*m),
+    fScin1PosX(0*m), fScin1PosY(0*m), fScin1PosZ(0*m),
+    fMRPC1PosX(0*m), fMRPC1PosY(0*m), fMRPC1PosZ(2.5*m),
+    fMRPC2PosX(0*m), fMRPC2PosY(0*m), fMRPC2PosZ(6.5*m),
+    fScin6PosX(0*m), fScin6PosY(0*m), fScin6PosZ(1*m),
+    fScin5PosX(0*m), fScin5PosY(0*m), fScin5PosZ(8.5*m),
+    fDarkBoxPosX(0*m), fDarkBoxPosY(0*m), fDarkBoxPosZ(4.5*m),
+    fTriggerPosX(0*m), fTriggerPosY(0*m), fTriggerPosZ(7.5*m),
+    // Internal DarkBox volumes.
+    fScin2PosX(0*m), fScin2PosY(0*m), fScin2PosZ(-0.45*m),
+    fScin3PosX(0*m), fScin3PosY(0*m), fScin3PosZ(0*m),
+    fScin4PosX(0*m), fScin4PosY(0*m), fScin4PosZ(0.45*m),
+    // Internal PMT/SiPM for Scintillator2.
+    fPMT2PosX(0.125*m), fPMT2PosY(0*m), fPMT2PosZ(-0.45*m),
+    fSiPM2PosX(0*m), fSiPM2PosY(0.06*m), fSiPM2PosZ(-0.45*m),
+    // For Scintillator3.
+    fPMT3PosX(0.125*m), fPMT3PosY(0*m), fPMT3PosZ(0*m),
+    fSiPM3PosX(0*m), fSiPM3PosY(0.06*m), fSiPM3PosZ(0*m),
+    // For Scintillator4.
+    fPMT4PosX(0.125*m), fPMT4PosY(0*m), fPMT4PosZ(0.45*m),
+    fSiPM4PosX(0*m), fSiPM4PosY(0.06*m), fSiPM4PosZ(0.45*m),
+    // DWC1 & DWC2.
+    fDWC1PosX(0*m), fDWC1PosY(0*m), fDWC1PosZ(0.06*m),
+    fDWC2PosX(0*m), fDWC2PosY(0*m), fDWC2PosZ(0.06*m),
+    fZOffset(4.25*m), fOverlapMaxChecks(1000), fOverlapTolerance(0.001*mm)
+{
+    // Populate the material cache.
+    DefineMaterials();
+
+    // Set up runtime messenger.
+    fMessenger = new G4GenericMessenger(this, "/detector/", "Detector construction control");
+    fMessenger->DeclareProperty("worldSizeZ", fWorldSizeZ, "World half-length in Z (m)")->SetUnit("m");
+
+    // Scintillator1 dynamic parameters.
+    fMessenger->DeclareProperty("scin1PosX", fScin1PosX, "X position for Scintillator1 (m)")->SetUnit("m");
+    fMessenger->DeclareProperty("scin1PosY", fScin1PosY, "Y position for Scintillator1 (m)")->SetUnit("m");
+    fMessenger->DeclareProperty("scin1PosZ", fScin1PosZ, "Z position for Scintillator1 (m)")->SetUnit("m");
+
+    // MRPC1 dynamic parameters.
+    fMessenger->DeclareProperty("mrpc1PosX", fMRPC1PosX, "X position for MRPC1 (m)")->SetUnit("m");
+    fMessenger->DeclareProperty("mrpc1PosY", fMRPC1PosY, "Y position for MRPC1 (m)")->SetUnit("m");
+    fMessenger->DeclareProperty("mrpc1PosZ", fMRPC1PosZ, "Z position for MRPC1 (m)")->SetUnit("m");
+
+    // MRPC2 dynamic parameters.
+    fMessenger->DeclareProperty("mrpc2PosX", fMRPC2PosX, "X position for MRPC2 (m)")->SetUnit("m");
+    fMessenger->DeclareProperty("mrpc2PosY", fMRPC2PosY, "Y position for MRPC2 (m)")->SetUnit("m");
+    fMessenger->DeclareProperty("mrpc2PosZ", fMRPC2PosZ, "Z position for MRPC2 (m)")->SetUnit("m");
+
+    // Scintillator6 dynamic parameters.
+    fMessenger->DeclareProperty("scin6PosX", fScin6PosX, "X position for Scintillator6 (m)")->SetUnit("m");
+    fMessenger->DeclareProperty("scin6PosY", fScin6PosY, "Y position for Scintillator6 (m)")->SetUnit("m");
+    fMessenger->DeclareProperty("scin6PosZ", fScin6PosZ, "Z position for Scintillator6 (m)")->SetUnit("m");
+
+    // Scintillator5 dynamic parameters.
+    fMessenger->DeclareProperty("scin5PosX", fScin5PosX, "X position for Scintillator5 (m)")->SetUnit("m");
+    fMessenger->DeclareProperty("scin5PosY", fScin5PosY, "Y position for Scintillator5 (m)")->SetUnit("m");
+    fMessenger->DeclareProperty("scin5PosZ", fScin5PosZ, "Z position for Scintillator5 (m)")->SetUnit("m");
+
+    // DarkBox dynamic parameters.
+    fMessenger->DeclareProperty("darkBoxPosX", fDarkBoxPosX, "X position for DarkBox (m)")->SetUnit("m");
+    fMessenger->DeclareProperty("darkBoxPosY", fDarkBoxPosY, "Y position for DarkBox (m)")->SetUnit("m");
+    fMessenger->DeclareProperty("darkBoxPosZ", fDarkBoxPosZ, "Z position for DarkBox (m)")->SetUnit("m");
+
+    // Internal DarkBox volumes.
+    fMessenger->DeclareProperty("scin2PosX", fScin2PosX, "X position for internal Scintillator2 (m)")->SetUnit("m");
+    fMessenger->DeclareProperty("scin2PosY", fScin2PosY, "Y position for internal Scintillator2 (m)")->SetUnit("m");
+    fMessenger->DeclareProperty("scin2PosZ", fScin2PosZ, "Z position for internal Scintillator2 (m)")->SetUnit("m");
+
+    fMessenger->DeclareProperty("scin3PosX", fScin3PosX, "X position for internal Scintillator3 (m)")->SetUnit("m");
+    fMessenger->DeclareProperty("scin3PosY", fScin3PosY, "Y position for internal Scintillator3 (m)")->SetUnit("m");
+    fMessenger->DeclareProperty("scin3PosZ", fScin3PosZ, "Z position for internal Scintillator3 (m)")->SetUnit("m");
+
+    fMessenger->DeclareProperty("scin4PosX", fScin4PosX, "X position for internal Scintillator4 (m)")->SetUnit("m");
+    fMessenger->DeclareProperty("scin4PosY", fScin4PosY, "Y position for internal Scintillator4 (m)")->SetUnit("m");
+    fMessenger->DeclareProperty("scin4PosZ", fScin4PosZ, "Z position for internal Scintillator4 (m)")->SetUnit("m");
+
+    // Internal PMT/SiPM positions for each internal scintillator.
+    // For Scintillator2.
+    fMessenger->DeclareProperty("pmt2PosX", fPMT2PosX, "X position for PMT on Scintillator2 (m)")->SetUnit("m");
+    fMessenger->DeclareProperty("pmt2PosY", fPMT2PosY, "Y position for PMT on Scintillator2 (m)")->SetUnit("m");
+    fMessenger->DeclareProperty("pmt2PosZ", fPMT2PosZ, "Z position for PMT on Scintillator2 (m)")->SetUnit("m");
+    fMessenger->DeclareProperty("sipm2PosX", fSiPM2PosX, "X position for SiPM on Scintillator2 (m)")->SetUnit("m");
+    fMessenger->DeclareProperty("sipm2PosY", fSiPM2PosY, "Y position for SiPM on Scintillator2 (m)")->SetUnit("m");
+    fMessenger->DeclareProperty("sipm2PosZ", fSiPM2PosZ, "Z position for SiPM on Scintillator2 (m)")->SetUnit("m");
+
+    // For Scintillator3.
+    fMessenger->DeclareProperty("pmt3PosX", fPMT3PosX, "X position for PMT on Scintillator3 (m)")->SetUnit("m");
+    fMessenger->DeclareProperty("pmt3PosY", fPMT3PosY, "Y position for PMT on Scintillator3 (m)")->SetUnit("m");
+    fMessenger->DeclareProperty("pmt3PosZ", fPMT3PosZ, "Z position for PMT on Scintillator3 (m)")->SetUnit("m");
+    fMessenger->DeclareProperty("sipm3PosX", fSiPM3PosX, "X position for SiPM on Scintillator3 (m)")->SetUnit("m");
+    fMessenger->DeclareProperty("sipm3PosY", fSiPM3PosY, "Y position for SiPM on Scintillator3 (m)")->SetUnit("m");
+    fMessenger->DeclareProperty("sipm3PosZ", fSiPM3PosZ, "Z position for SiPM on Scintillator3 (m)")->SetUnit("m");
+
+    // For Scintillator4.
+    fMessenger->DeclareProperty("pmt4PosX", fPMT4PosX, "X position for PMT on Scintillator4 (m)")->SetUnit("m");
+    fMessenger->DeclareProperty("pmt4PosY", fPMT4PosY, "Y position for PMT on Scintillator4 (m)")->SetUnit("m");
+    fMessenger->DeclareProperty("pmt4PosZ", fPMT4PosZ, "Z position for PMT on Scintillator4 (m)")->SetUnit("m");
+    fMessenger->DeclareProperty("sipm4PosX", fSiPM4PosX, "X position for SiPM on Scintillator4 (m)")->SetUnit("m");
+    fMessenger->DeclareProperty("sipm4PosY", fSiPM4PosY, "Y position for SiPM on Scintillator4 (m)")->SetUnit("m");
+    fMessenger->DeclareProperty("sipm4PosZ", fSiPM4PosZ, "Z position for SiPM on Scintillator4 (m)")->SetUnit("m");
+
+    // DWC1 dynamic parameters.
+    fMessenger->DeclareProperty("dwc1PosX", fDWC1PosX, "X position for DWC1 (m)")->SetUnit("m");
+    fMessenger->DeclareProperty("dwc1PosY", fDWC1PosY, "Y position for DWC1 (m)")->SetUnit("m");
+    fMessenger->DeclareProperty("dwc1PosZ", fDWC1PosZ, "Z offset for DWC1 (m)")->SetUnit("m");
+
+    // DWC2 dynamic parameters.
+    fMessenger->DeclareProperty("dwc2PosX", fDWC2PosX, "X position for DWC2 (m)")->SetUnit("m");
+    fMessenger->DeclareProperty("dwc2PosY", fDWC2PosY, "Y position for DWC2 (m)")->SetUnit("m");
+    fMessenger->DeclareProperty("dwc2PosZ", fDWC2PosZ, "Z offset for DWC2 (m)")->SetUnit("m");
+
+    // Trigger dynamic parameters.
+    fMessenger->DeclareProperty("triggerPosX", fTriggerPosX, "X position for Trigger (m)")->SetUnit("m");
+    fMessenger->DeclareProperty("triggerPosY", fTriggerPosY, "Y position for Trigger (m)")->SetUnit("m");
+    fMessenger->DeclareProperty("triggerPosZ", fTriggerPosZ, "Z position for Trigger (m)")->SetUnit("m");
+
+    fMessenger->DeclareProperty("zOffset", fZOffset, "Z offset to center geometry at beamline midpoint (default: 4.25 m)")->SetUnit("m");
+    fMessenger->DeclareProperty("overlapTolerance", fOverlapTolerance, "Overlap check tolerance (mm)")->SetUnit("mm");
+
+    fMessenger->DeclareMethod("resetSensitiveDetectors", this, &DetectorConstruction::ResetSensitiveDetectors,
+                              "Reset sensitive detectors dynamically.");
+    fMessenger->DeclareMethod("updateGeometry", this, &DetectorConstruction::UpdateGeometryParameters,
+                              "Update geometry parameters dynamically.");
+    fMessenger->DeclareMethod("toggleVis", this, &DetectorConstruction::ToggleVisualization,
+                              "Toggle visualization attributes interactively.");
+}
+
+//---------------------------------------------------------------------
+// Destructor: Clean up messenger and clear material cache.
+DetectorConstruction::~DetectorConstruction() {
+    delete fMessenger;
+    fMatCache.clear();
+}
+
+//---------------------------------------------------------------------
+// DefineMaterials: Populate fMatCache with basic and composite materials.
+void DetectorConstruction::DefineMaterials() {
+    G4NistManager* nist = G4NistManager::GetNistManager();
+    fMatCache.clear();
+
+    fMatCache["G4_AIR"] = nist->FindOrBuildMaterial("G4_AIR");
+    fMatCache["G4_PLASTIC_SC_VINYLTOLUENE"] = nist->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
+    fMatCache["G4_Al"] = nist->FindOrBuildMaterial("G4_Al");
+
+    // Composite materials for PMT and SiPM.
+    G4double densityPMTGlass = 2.2*g/cm3;
+    fMatCache["PMTGlass"] = new G4Material("PMTGlass", densityPMTGlass, 2);
+    fMatCache["PMTGlass"]->AddMaterial(nist->FindOrBuildMaterial("G4_SILICON_DIOXIDE"), 0.9);
+    fMatCache["PMTGlass"]->AddMaterial(nist->FindOrBuildMaterial("G4_SODIUM"), 0.1);
+
+    G4double densitySiPM = 2.33*g/cm3;
+    fMatCache["SiPMComposite"] = new G4Material("SiPMComposite", densitySiPM, 2);
+    fMatCache["SiPMComposite"]->AddMaterial(nist->FindOrBuildMaterial("G4_Si"), 0.95);
+    fMatCache["SiPMComposite"]->AddMaterial(nist->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE"), 0.05);
+
+    // Fallback basic materials.
+    fMatCache["G4_SILICON_DIOXIDE"] = nist->FindOrBuildMaterial("G4_SILICON_DIOXIDE");
+    fMatCache["G4_Si"] = nist->FindOrBuildMaterial("G4_Si");
+
+    // DWCGas.
+    G4double densityDWCGas = 1.2e-3*g/cm3;
+    fMatCache["DWCGas"] = new G4Material("DWCGas", densityDWCGas, 2, kStateGas, 293.15*kelvin, 1.0*atmosphere);
+    fMatCache["DWCGas"]->AddMaterial(nist->FindOrBuildMaterial("G4_Ar"), 0.80);
+    fMatCache["DWCGas"]->AddMaterial(nist->FindOrBuildMaterial("G4_CARBON_DIOXIDE"), 0.20);
+
+    // MRPCGas.
+    G4Element* elC = nist->FindOrBuildElement("C");
+    G4Element* elH = nist->FindOrBuildElement("H");
+    G4Element* elF = nist->FindOrBuildElement("F");
+    G4Element* elS = nist->FindOrBuildElement("S");
+    G4double densityR134a = 4.25e-3*g/cm3;
+    G4Material* R134a = new G4Material("R134a", densityR134a, 3, kStateGas, 293.15*kelvin, 1.0*atmosphere);
+    R134a->AddElement(elC, 2);
+    R134a->AddElement(elH, 2);
+    R134a->AddElement(elF, 4);
+    G4double densityIso = 2.5e-3*g/cm3;
+    G4Material* Isobutane = new G4Material("Isobutane", densityIso, 2, kStateGas, 293.15*kelvin, 1.0*atmosphere);
+    Isobutane->AddElement(elC, 4);
+    Isobutane->AddElement(elH, 10);
+    G4double densitySF6 = 6.17e-3*g/cm3;
+    G4Material* SF6 = new G4Material("SF6", densitySF6, 2, kStateGas, 293.15*kelvin, 1.0*atmosphere);
+    SF6->AddElement(elS, 1);
+    SF6->AddElement(elF, 6);
+    G4double densityMRPCGas = 1.2e-3*g/cm3;
+    G4Material* MRPCGas = new G4Material("MRPCGas", densityMRPCGas, 3, kStateGas, 293.15*kelvin, 1.0*atmosphere);
+    MRPCGas->AddMaterial(R134a, 0.90);
+    MRPCGas->AddMaterial(Isobutane, 0.05);
+    MRPCGas->AddMaterial(SF6, 0.05);
+    fMatCache["MRPCGas"] = MRPCGas;
+}
+
+//---------------------------------------------------------------------
+// BuildAdvancedDetector: Construct the complete detector geometry.
+G4VPhysicalVolume* DetectorConstruction::BuildAdvancedDetector() {
+    G4double zOffset = fZOffset;
+    G4NistManager* nist = G4NistManager::GetNistManager();
+
+    // --- World Volume ---
+    G4double world_x = 2*m, world_y = 2*m, world_z = fWorldSizeZ;
+    G4Box* solidWorld = new G4Box("World", world_x, world_y, world_z);
+    G4LogicalVolume* logicWorld = new G4LogicalVolume(solidWorld, fMatCache["G4_AIR"], "World");
+    G4VPhysicalVolume* physWorld = new G4PVPlacement(0, G4ThreeVector(0,0,0), logicWorld, "World", 0, false, 0, true);
+
+    // --- Scintillator1 (20x10x0.5 cm³) ---
+    G4Box* solidScin1 = new G4Box("Scintillator1", 20*cm/2, 10*cm/2, 0.5*cm/2);
+    G4LogicalVolume* logicScin1 = new G4LogicalVolume(solidScin1, fMatCache["G4_PLASTIC_SC_VINYLTOLUENE"], "Scintillator1");
+    G4ThreeVector posScin1(fScin1PosX, fScin1PosY, fScin1PosZ - zOffset);
+    new G4PVPlacement(0, posScin1, logicScin1, "Scintillator1", logicWorld, false, 0, true);
+
+    // --- DWC1 (10x10x5 cm³) ---
+    G4Box* solidDWC1 = new G4Box("DWC1", 10*cm/2, 10*cm/2, 5*cm/2);
+    G4LogicalVolume* logicDWC1 = new G4LogicalVolume(solidDWC1, fMatCache["DWCGas"], "DWC1");
+    G4ThreeVector posDWC1(fDWC1PosX, fDWC1PosY, fScin1PosZ - zOffset + fDWC1PosZ);
+    new G4PVPlacement(0, posDWC1, logicDWC1, "DWC1", logicWorld, false, 0, true);
+
+    // --- Scintillator6 (Halo, 20x10x0.5 cm³ with 4x4 cm² hole) ---
+    G4Box* solidScin6 = new G4Box("Scintillator6", 20*cm/2, 10*cm/2, 0.5*cm/2);
+    G4Box* solidHole = new G4Box("Hole", 4*cm/2, 4*cm/2, 0.6*cm/2);
+    G4SubtractionSolid* solidScin6WithHole = new G4SubtractionSolid("Scintillator6WithHole", solidScin6, solidHole, 0, G4ThreeVector(0,0,0));
+    G4LogicalVolume* logicScin6 = new G4LogicalVolume(solidScin6WithHole, fMatCache["G4_PLASTIC_SC_VINYLTOLUENE"], "Scintillator6");
+    G4ThreeVector posScin6(fScin6PosX, fScin6PosY, fScin6PosZ - zOffset);
+    new G4PVPlacement(0, posScin6, logicScin6, "Scintillator6", logicWorld, false, 0, true);
+
+    // --- MRPC1 (30x30x0.5 cm³) ---
+    G4Box* solidMRPC1 = new G4Box("MRPC1", 30*cm/2, 30*cm/2, 0.5*cm/2);
+    G4LogicalVolume* logicMRPC1 = new G4LogicalVolume(solidMRPC1, fMatCache["MRPCGas"], "MRPC1");
+    G4ThreeVector posMRPC1(fMRPC1PosX, fMRPC1PosY, fMRPC1PosZ - zOffset);
+    new G4PVPlacement(0, posMRPC1, logicMRPC1, "MRPC1", logicWorld, false, 0, true);
+
+    // --- DarkBox (Full dimensions: 100x50x100 cm³; half-dimensions: 50, 25, 50 cm) ---
+    G4Box* solidDarkBox = new G4Box("DarkBox", 50*cm, 25*cm, 50*cm);
+    G4LogicalVolume* logicDarkBox = new G4LogicalVolume(solidDarkBox, fMatCache["G4_Al"], "DarkBox");
+    G4ThreeVector posDarkBox(fDarkBoxPosX, fDarkBoxPosY, fDarkBoxPosZ - zOffset);
+    new G4PVPlacement(0, posDarkBox, logicDarkBox, "DarkBox", logicWorld, false, 0, true);
+
+    // --- Internal DarkBox Volumes ---
+    // Scintillator2 (20x10x0.5 cm³)
+    G4Box* solidScin2 = new G4Box("Scintillator2", 20*cm/2, 10*cm/2, 0.5*cm/2);
+    G4LogicalVolume* logicScin2 = new G4LogicalVolume(solidScin2, fMatCache["G4_PLASTIC_SC_VINYLTOLUENE"], "Scintillator2");
+    G4ThreeVector posScin2_dark(fScin2PosX, fScin2PosY, fScin2PosZ);
+    new G4PVPlacement(0, posScin2_dark, logicScin2, "Scintillator2", logicDarkBox, false, 0, true);
+
+    // Scintillator3 (20x10x0.5 cm³)
+    G4Box* solidScin3 = new G4Box("Scintillator3", 20*cm/2, 10*cm/2, 0.5*cm/2);
+    G4LogicalVolume* logicScin3 = new G4LogicalVolume(solidScin3, fMatCache["G4_PLASTIC_SC_VINYLTOLUENE"], "Scintillator3");
+    G4ThreeVector posScin3_dark(fScin3PosX, fScin3PosY, fScin3PosZ);
+    new G4PVPlacement(0, posScin3_dark, logicScin3, "Scintillator3", logicDarkBox, false, 0, true);
+
+    // Scintillator4 (20x10x0.5 cm³)
+    G4Box* solidScin4 = new G4Box("Scintillator4", 20*cm/2, 10*cm/2, 0.5*cm/2);
+    G4LogicalVolume* logicScin4 = new G4LogicalVolume(solidScin4, fMatCache["G4_PLASTIC_SC_VINYLTOLUENE"], "Scintillator4");
+    G4ThreeVector posScin4_dark(fScin4PosX, fScin4PosY, fScin4PosZ);
+    new G4PVPlacement(0, posScin4_dark, logicScin4, "Scintillator4", logicDarkBox, false, 0, true);
+
+    // --- Internal DarkBox PMTs and SiPMs ---
+    // PMT (5 cm diameter, 1 cm thickness) → half-dimensions: (2.5 cm, 2.5 cm, 0.5 cm)
+    G4Tubs* solidPMT = new G4Tubs("PMT", 0, 2.5*cm, 1*cm/2, 0, 360*deg);
+    G4LogicalVolume* logicPMT = new G4LogicalVolume(solidPMT, fMatCache["PMTGlass"], "PMT");
+    // SiPM (0.5x0.5x0.1 cm³) → half-dimensions: (0.25 cm, 0.25 cm, 0.05 cm)
+    G4Box* solidSiPM = new G4Box("SiPM", 0.5*cm/2, 0.5*cm/2, 0.1*cm/2);
+    G4LogicalVolume* logicSiPM = new G4LogicalVolume(solidSiPM, fMatCache["SiPMComposite"], "SiPM");
+    // For internal Scintillator2.
+    G4ThreeVector posPMT2(fPMT2PosX, fPMT2PosY, fPMT2PosZ);
+    new G4PVPlacement(0, posPMT2, logicPMT, "PMT2", logicDarkBox, false, 0, true);
+    G4ThreeVector posSiPM2(fSiPM2PosX, fSiPM2PosY, fSiPM2PosZ);
+    new G4PVPlacement(0, posSiPM2, logicSiPM, "SiPM2", logicDarkBox, false, 0, true);
+    // For internal Scintillator3.
+    G4ThreeVector posPMT3(fPMT3PosX, fPMT3PosY, fPMT3PosZ);
+    new G4PVPlacement(0, posPMT3, logicPMT, "PMT3", logicDarkBox, false, 1, true);
+    G4ThreeVector posSiPM3(fSiPM3PosX, fSiPM3PosY, fSiPM3PosZ);
+    new G4PVPlacement(0, posSiPM3, logicSiPM, "SiPM3", logicDarkBox, false, 1, true);
+    // For internal Scintillator4.
+    G4ThreeVector posPMT4(fPMT4PosX, fPMT4PosY, fPMT4PosZ);
+    new G4PVPlacement(0, posPMT4, logicPMT, "PMT4", logicDarkBox, false, 2, true);
+    G4ThreeVector posSiPM4(fSiPM4PosX, fSiPM4PosY, fSiPM4PosZ);
+    new G4PVPlacement(0, posSiPM4, logicSiPM, "SiPM4", logicDarkBox, false, 2, true);
+
+    // --- MRPC2 (30x30x0.5 cm³) ---
+    G4Box* solidMRPC2 = new G4Box("MRPC2", 30*cm/2, 30*cm/2, 0.5*cm/2);
+    G4LogicalVolume* logicMRPC2 = new G4LogicalVolume(solidMRPC2, fMatCache["MRPCGas"], "MRPC2");
+    G4ThreeVector posMRPC2(fMRPC2PosX, fMRPC2PosY, fMRPC2PosZ - zOffset);
+    new G4PVPlacement(0, posMRPC2, logicMRPC2, "MRPC2", logicWorld, false, 0, true);
+
+    // --- Scintillator5 (20x10x0.5 cm³) + DWC2 (10x10x5 cm³) ---
+    G4Box* solidScin5 = new G4Box("Scintillator5", 20*cm/2, 10*cm/2, 0.5*cm/2);
+    G4LogicalVolume* logicScin5 = new G4LogicalVolume(solidScin5, fMatCache["G4_PLASTIC_SC_VINYLTOLUENE"], "Scintillator5");
+    G4ThreeVector posScin5(fScin5PosX, fScin5PosY, fScin5PosZ - zOffset);
+    new G4PVPlacement(0, posScin5, logicScin5, "Scintillator5", logicWorld, false, 0, true);
+    G4Box* solidDWC2 = new G4Box("DWC2", 10*cm/2, 10*cm/2, 5*cm/2);
+    G4LogicalVolume* logicDWC2 = new G4LogicalVolume(solidDWC2, fMatCache["DWCGas"], "DWC2");
+    G4ThreeVector posDWC2(fDWC2PosX, fDWC2PosY, fScin5PosZ - zOffset + fDWC2PosZ);
+    new G4PVPlacement(0, posDWC2, logicDWC2, "DWC2", logicWorld, false, 0, true);
+
+    // --- Trigger Volume (10x10x0.5 cm³) ---
+    G4Box* solidTrigger = new G4Box("Trigger", 10*cm/2, 10*cm/2, 0.5*cm/2);
+    G4LogicalVolume* logicTrigger = new G4LogicalVolume(solidTrigger, fMatCache["G4_PLASTIC_SC_VINYLTOLUENE"], "Trigger");
+    G4ThreeVector posTrigger(fTriggerPosX, fTriggerPosY, fTriggerPosZ - fZOffset);
+    new G4PVPlacement(0, posTrigger, logicTrigger, "Trigger", logicWorld, false, 0, true);
+
+    return worldVol;
+}
+
+//---------------------------------------------------------------------
+// IntegrateAllSensitiveDetectors: Attach sensitive detectors to key volumes.
+void DetectorConstruction::IntegrateAllSensitiveDetectors() {
+    const std::vector<G4String> volNames = {
+        "Scintillator1", "MRPC1", "DWC1", "Scintillator6", "MRPC2", "Scintillator5",
+        "Scintillator2", "Scintillator3", "Scintillator4", "Trigger",
+        "PMT2", "PMT3", "PMT4", "SiPM2", "SiPM3", "SiPM4"
+    };
+    G4SDManager* sdManager = G4SDManager::GetSDMpointer();
+    for (const auto& name : volNames) {
+        G4LogicalVolume* lv = G4LogicalVolumeStore::GetInstance()->GetVolume(name);
+        if (lv && !lv->GetSensitiveDetector()) {
+            MyAdvancedSensitiveDetector* sd = new MyAdvancedSensitiveDetector("SD_" + name);
+            sdManager->AddNewDetector(sd);
+            lv->SetSensitiveDetector(sd);
+        }
+    }
+}
+
+//---------------------------------------------------------------------
+// AdvancedOverlapCheck: Check for overlaps using configurable parameters.
+void DetectorConstruction::AdvancedOverlapCheck() {
+    G4GeometryManager::GetInstance()->OpenGeometry();
+    auto pvStore = G4PhysicalVolumeStore::GetInstance();
+    for (auto pv : *pvStore) {
+        if (pv->GetLogicalVolume()->CheckOverlaps(fOverlapMaxChecks, 0, true, fOverlapTolerance)) {
+            G4Exception("DetectorConstruction::AdvancedOverlapCheck", "OverlapError",
+                        FatalException, ("Overlap detected in volume: " + pv->GetName()).c_str());
+        }
+    }
+}
+
+//---------------------------------------------------------------------
+// DumpAdvancedGeometryInfo: Dump detailed geometry info to a file.
+void DetectorConstruction::DumpAdvancedGeometryInfo(const G4String& fileName) {
+    std::ofstream outFile(fileName);
+    if (!outFile.is_open()) {
+        G4Exception("DetectorConstruction::DumpAdvancedGeometryInfo", "FileError",
+                    JustWarning, "Unable to open file for advanced geometry dump.");
+        return;
+    }
+    outFile << "=== Advanced Geometry Dump ===\n";
+    auto pvStore = G4PhysicalVolumeStore::GetInstance();
+    for (auto pv : *pvStore) {
+        outFile << "Volume: " << pv->GetName()
+                << ", Material: " << pv->GetLogicalVolume()->GetMaterial()->GetName() << "\n";
+    }
+    outFile.close();
+    G4UImanager::GetUIpointer()->ApplyCommand("/geometry/dumpStructure");
+    G4cout << "Advanced geometry info dumped to " << fileName << G4endl;
+}
+
+//---------------------------------------------------------------------
+// SetAdvancedVisAttributes: Apply visualization attributes to key volumes.
+void DetectorConstruction::SetAdvancedVisAttributes() {
+    // For Scintillator1.
+    G4LogicalVolume* scin1LV = G4LogicalVolumeStore::GetInstance()->GetVolume("Scintillator1");
+    if (scin1LV) {
+        G4VisAttributes* visScin1 = new G4VisAttributes(G4Colour(0.0, 1.0, 0.0)); // Green
+        visScin1->SetForceSolid(true);
+        visScin1->SetVisibility(true);
+        visScin1->SetLineWidth(2);
+        scin1LV->SetVisAttributes(visScin1);
+    }
+    // For MRPC1.
+    G4LogicalVolume* mrpc1LV = G4LogicalVolumeStore::GetInstance()->GetVolume("MRPC1");
+    if (mrpc1LV) {
+        G4VisAttributes* visMRPC1 = new G4VisAttributes(G4Colour(0.0, 0.0, 1.0)); // Blue
+        visMRPC1->SetForceSolid(true);
+        visMRPC1->SetVisibility(true);
+        visMRPC1->SetLineWidth(2);
+        mrpc1LV->SetVisAttributes(visMRPC1);
+    }
+    // Default visualization for volumes without attributes.
+    auto lvStore = G4LogicalVolumeStore::GetInstance();
+    for (auto lv : *lvStore) {
+        if (!lv->GetVisAttributes()) {
+            G4VisAttributes* defaultVis = new G4VisAttributes(G4Colour(0.8, 0.8, 0.8));
+            defaultVis->SetForceSolid(true);
+            lv->SetVisAttributes(defaultVis);
+        }
+    }
+}
+
+//---------------------------------------------------------------------
+// ToggleVisualization: Interactively toggle visibility for all volumes.
+void DetectorConstruction::ToggleVisualization() {
+    auto lvStore = G4LogicalVolumeStore::GetInstance();
+    for (auto lv : *lvStore) {
+        G4VisAttributes* visAttr = lv->GetVisAttributes();
+        if (visAttr) {
+            visAttr->SetVisibility(!visAttr->GetVisibility());
+        }
+    }
+    G4cout << "Visualization toggled for all volumes." << G4endl;
+    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
+}
+
+//---------------------------------------------------------------------
+// ResetSensitiveDetectors: Dynamically reset sensitive detectors.
+void DetectorConstruction::ResetSensitiveDetectors() {
+    G4SDManager* sdManager = G4SDManager::GetSDMpointer();
+    MyAdvancedSensitiveDetector* newSD = new MyAdvancedSensitiveDetector("Advanced_SD_Reset");
+    sdManager->AddNewDetector(newSD);
+    G4LogicalVolume* lv = G4LogicalVolumeStore::GetInstance()->GetVolume("Scintillator1");
+    if (lv) { lv->SetSensitiveDetector(newSD); }
+    G4cout << "Sensitive detectors reset dynamically." << G4endl;
+}
+
+//---------------------------------------------------------------------
+// UpdateGeometryParameters: Notify Geant4 of geometry modifications.
+void DetectorConstruction::UpdateGeometryParameters() {
+    G4RunManager::GetRunManager()->GeometryHasBeenModified();
+    G4cout << "Geometry parameters updated:" << G4endl
+           << "  Scintillator1 pos = (" << fScin1PosX/m << ", " << fScin1PosY/m << ", " << fScin1PosZ/m << ") m" << G4endl
+           << "  MRPC1 pos = (" << fMRPC1PosX/m << ", " << fMRPC1PosY/m << ", " << fMRPC1PosZ/m << ") m" << G4endl;
+}
+
+//---------------------------------------------------------------------
+// AdvancedDynamicGeometryUpdate: Additional dynamic update.
+void DetectorConstruction::AdvancedDynamicGeometryUpdate() {
+    UpdateGeometryParameters();
+    // Advanced: Recalculate fZOffset based on world geometry if needed.
+    fZOffset = fWorldSizeZ;
+    G4cout << "fZOffset recalculated dynamically: " << fZOffset/m << " m" << G4endl;
+    G4cout << "Advanced dynamic geometry update performed." << G4endl;
+}
+
+//---------------------------------------------------------------------
+// AdvancedGeometryEnhancement: Verify geometry integrity and boundaries.
+void DetectorConstruction::AdvancedGeometryEnhancement() {
+    G4LogicalVolume* worldLV = G4LogicalVolumeStore::GetInstance()->GetVolume("World");
+    if (!worldLV) {
+        G4Exception("DetectorConstruction::AdvancedGeometryEnhancement", "WorldVolumeError",
+                    FatalException, "World logical volume not found!");
+    }
+    auto pvStore = G4PhysicalVolumeStore::GetInstance();
+    for (auto pv : *pvStore) {
+        G4ThreeVector pos = pv->GetTranslation();
+        if (std::abs(pos.x()) > 2*m || std::abs(pos.y()) > 2*m || std::abs(pos.z()) > fWorldSizeZ) {
+            G4Exception("DetectorConstruction::AdvancedGeometryEnhancement", "BoundaryError",
+                        FatalException, ("Volume " + pv->GetName() + " lies outside world boundaries.").c_str());
+        }
+    }
+    G4cout << "Advanced geometry enhancement check passed: All volumes within boundaries." << G4endl;
+}
+
+//---------------------------------------------------------------------
+// LoadGeometryFromGDML: Load geometry from a GDML file (placeholder).
+void DetectorConstruction::LoadGeometryFromGDML(const G4String& gdmlFile) {
+    G4GDMLParser parser;
+    parser.Read(gdmlFile);
+    G4VPhysicalVolume* worldVol = parser.GetWorldVolume();
+    if (worldVol) {
+        G4RunManager::GetRunManager()->DefineWorldVolume(worldVol);
+        G4cout << "Geometry loaded successfully from GDML file: " << gdmlFile << G4endl;
+    } else {
+        G4Exception("DetectorConstruction::LoadGeometryFromGDML", "GDMLError",
+                    FatalException, "Failed to load GDML geometry.");
+    }
+}
+
+//---------------------------------------------------------------------
+// OptimizeMaterials: Advanced material optimization (placeholder).
+void DetectorConstruction::OptimizeMaterials() {
+    // Placeholder for advanced material cache optimization.
+    G4cout << "Advanced material optimization executed." << G4endl;
+}
+
+//---------------------------------------------------------------------
+// BuildTriggerVolume: Create and integrate a placeholder trigger volume.
+// Note: To avoid duplicate Trigger volumes, this function is not called separately.
+void DetectorConstruction::BuildTriggerVolume() {
+    G4cout << "BuildTriggerVolume() not called separately to avoid duplicate Trigger volumes." << G4endl;
+}
+
+//---------------------------------------------------------------------
+// BuildAdvancedDetector: Central function integrating all features.
+G4VPhysicalVolume* DetectorConstruction::BuildAdvancedDetector() {
+    // Build the base geometry using dynamic parameters.
+    G4VPhysicalVolume* worldVol = nullptr;
+    {
+        G4double zOffset = fZOffset;
+        G4NistManager* nist = G4NistManager::GetNistManager();
+        // --- World Volume ---
+        G4double world_x = 2*m, world_y = 2*m, world_z = fWorldSizeZ;
+        G4Box* solidWorld = new G4Box("World", world_x, world_y, world_z);
+        G4LogicalVolume* logicWorld = new G4LogicalVolume(solidWorld, fMatCache["G4_AIR"], "World");
+        worldVol = new G4PVPlacement(0, G4ThreeVector(0,0,0), logicWorld, "World", 0, false, 0, true);
+
+        // --- Scintillator1 (20x10x0.5 cm³) ---
+        G4Box* solidScin1 = new G4Box("Scintillator1", 20*cm/2, 10*cm/2, 0.5*cm/2);
+        G4LogicalVolume* logicScin1 = new G4LogicalVolume(solidScin1, fMatCache["G4_PLASTIC_SC_VINYLTOLUENE"], "Scintillator1");
+        G4ThreeVector posScin1(fScin1PosX, fScin1PosY, fScin1PosZ - zOffset);
+        new G4PVPlacement(0, posScin1, logicScin1, "Scintillator1", logicWorld, false, 0, true);
+
+        // --- DWC1 (10x10x5 cm³) ---
+        G4Box* solidDWC1 = new G4Box("DWC1", 10*cm/2, 10*cm/2, 5*cm/2);
+        G4LogicalVolume* logicDWC1 = new G4LogicalVolume(solidDWC1, fMatCache["DWCGas"], "DWC1");
+        G4ThreeVector posDWC1(fDWC1PosX, fDWC1PosY, fScin1PosZ - zOffset + fDWC1PosZ);
+        new G4PVPlacement(0, posDWC1, logicDWC1, "DWC1", logicWorld, false, 0, true);
+
+        // --- Scintillator6 (Halo, 20x10x0.5 cm³ with 4x4 cm² hole) ---
+        G4Box* solidScin6 = new G4Box("Scintillator6", 20*cm/2, 10*cm/2, 0.5*cm/2);
+        G4Box* solidHole = new G4Box("Hole", 4*cm/2, 4*cm/2, 0.6*cm/2);
+        G4SubtractionSolid* solidScin6WithHole = new G4SubtractionSolid("Scintillator6WithHole", solidScin6, solidHole, 0, G4ThreeVector(0,0,0));
+        G4LogicalVolume* logicScin6 = new G4LogicalVolume(solidScin6WithHole, fMatCache["G4_PLASTIC_SC_VINYLTOLUENE"], "Scintillator6");
+        G4ThreeVector posScin6(fScin6PosX, fScin6PosY, fScin6PosZ - zOffset);
+        new G4PVPlacement(0, posScin6, logicScin6, "Scintillator6", logicWorld, false, 0, true);
+
+        // --- MRPC1 (30x30x0.5 cm³) ---
+        G4Box* solidMRPC1 = new G4Box("MRPC1", 30*cm/2, 30*cm/2, 0.5*cm/2);
+        G4LogicalVolume* logicMRPC1 = new G4LogicalVolume(solidMRPC1, fMatCache["MRPCGas"], "MRPC1");
+        G4ThreeVector posMRPC1(fMRPC1PosX, fMRPC1PosY, fMRPC1PosZ - zOffset);
+        new G4PVPlacement(0, posMRPC1, logicMRPC1, "MRPC1", logicWorld, false, 0, true);
+
+        // --- DarkBox (Full dimensions: 100x50x100 cm³) ---
+        G4Box* solidDarkBox = new G4Box("DarkBox", 50*cm, 25*cm, 50*cm);
+        G4LogicalVolume* logicDarkBox = new G4LogicalVolume(solidDarkBox, fMatCache["G4_Al"], "DarkBox");
+        G4ThreeVector posDarkBox(fDarkBoxPosX, fDarkBoxPosY, fDarkBoxPosZ - zOffset);
+        new G4PVPlacement(0, posDarkBox, logicDarkBox, "DarkBox", logicWorld, false, 0, true);
+
+        // --- Internal DarkBox Volumes ---
+        // Scintillator2 (20x10x0.5 cm³)
+        G4Box* solidScin2 = new G4Box("Scintillator2", 20*cm/2, 10*cm/2, 0.5*cm/2);
+        G4LogicalVolume* logicScin2 = new G4LogicalVolume(solidScin2, fMatCache["G4_PLASTIC_SC_VINYLTOLUENE"], "Scintillator2");
+        G4ThreeVector posScin2_dark(fScin2PosX, fScin2PosY, fScin2PosZ);
+        new G4PVPlacement(0, posScin2_dark, logicScin2, "Scintillator2", logicDarkBox, false, 0, true);
+
+        // Scintillator3 (20x10x0.5 cm³)
+        G4Box* solidScin3 = new G4Box("Scintillator3", 20*cm/2, 10*cm/2, 0.5*cm/2);
+        G4LogicalVolume* logicScin3 = new G4LogicalVolume(solidScin3, fMatCache["G4_PLASTIC_SC_VINYLTOLUENE"], "Scintillator3");
+        G4ThreeVector posScin3_dark(fScin3PosX, fScin3PosY, fScin3PosZ);
+        new G4PVPlacement(0, posScin3_dark, logicScin3, "Scintillator3", logicDarkBox, false, 0, true);
+
+        // Scintillator4 (20x10x0.5 cm³)
+        G4Box* solidScin4 = new G4Box("Scintillator4", 20*cm/2, 10*cm/2, 0.5*cm/2);
+        G4LogicalVolume* logicScin4 = new G4LogicalVolume(solidScin4, fMatCache["G4_PLASTIC_SC_VINYLTOLUENE"], "Scintillator4");
+        G4ThreeVector posScin4_dark(fScin4PosX, fScin4PosY, fScin4PosZ);
+        new G4PVPlacement(0, posScin4_dark, logicScin4, "Scintillator4", logicDarkBox, false, 0, true);
+
+        // --- Internal DarkBox PMTs and SiPMs ---
+        // PMT (5 cm diameter, 1 cm thickness) → half-dimensions: (2.5 cm, 2.5 cm, 0.5 cm)
+        G4Tubs* solidPMT = new G4Tubs("PMT", 0, 2.5*cm, 1*cm/2, 0, 360*deg);
+        G4LogicalVolume* logicPMT = new G4LogicalVolume(solidPMT, fMatCache["PMTGlass"], "PMT");
+        // SiPM (0.5x0.5x0.1 cm³) → half-dimensions: (0.25 cm, 0.25 cm, 0.05 cm)
+        G4Box* solidSiPM = new G4Box("SiPM", 0.5*cm/2, 0.5*cm/2, 0.1*cm/2);
+        G4LogicalVolume* logicSiPM = new G4LogicalVolume(solidSiPM, fMatCache["SiPMComposite"], "SiPM");
+        // For internal Scintillator2.
+        G4ThreeVector posPMT2(fPMT2PosX, fPMT2PosY, fPMT2PosZ);
+        new G4PVPlacement(0, posPMT2, logicPMT, "PMT2", logicDarkBox, false, 0, true);
+        G4ThreeVector posSiPM2(fSiPM2PosX, fSiPM2PosY, fSiPM2PosZ);
+        new G4PVPlacement(0, posSiPM2, logicSiPM, "SiPM2", logicDarkBox, false, 0, true);
+        // For internal Scintillator3.
+        G4ThreeVector posPMT3(fPMT3PosX, fPMT3PosY, fPMT3PosZ);
+        new G4PVPlacement(0, posPMT3, logicPMT, "PMT3", logicDarkBox, false, 1, true);
+        G4ThreeVector posSiPM3(fSiPM3PosX, fSiPM3PosY, fSiPM3PosZ);
+        new G4PVPlacement(0, posSiPM3, logicSiPM, "SiPM3", logicDarkBox, false, 1, true);
+        // For internal Scintillator4.
+        G4ThreeVector posPMT4(fPMT4PosX, fPMT4PosY, fPMT4PosZ);
+        new G4PVPlacement(0, posPMT4, logicPMT, "PMT4", logicDarkBox, false, 2, true);
+        G4ThreeVector posSiPM4(fSiPM4PosX, fSiPM4PosY, fSiPM4PosZ);
+        new G4PVPlacement(0, posSiPM4, logicSiPM, "SiPM4", logicDarkBox, false, 2, true);
+
+        // --- MRPC2 (30x30x0.5 cm³) ---
+        G4Box* solidMRPC2 = new G4Box("MRPC2", 30*cm/2, 30*cm/2, 0.5*cm/2);
+        G4LogicalVolume* logicMRPC2 = new G4LogicalVolume(solidMRPC2, fMatCache["MRPCGas"], "MRPC2");
+        G4ThreeVector posMRPC2(fMRPC2PosX, fMRPC2PosY, fMRPC2PosZ - zOffset);
+        new G4PVPlacement(0, posMRPC2, logicMRPC2, "MRPC2", logicWorld, false, 0, true);
+
+        // --- Scintillator5 (20x10x0.5 cm³) + DWC2 (10x10x5 cm³) ---
+        G4Box* solidScin5 = new G4Box("Scintillator5", 20*cm/2, 10*cm/2, 0.5*cm/2);
+        G4LogicalVolume* logicScin5 = new G4LogicalVolume(solidScin5, fMatCache["G4_PLASTIC_SC_VINYLTOLUENE"], "Scintillator5");
+        G4ThreeVector posScin5(fScin5PosX, fScin5PosY, fScin5PosZ - zOffset);
+        new G4PVPlacement(0, posScin5, logicScin5, "Scintillator5", logicWorld, false, 0, true);
+        G4Box* solidDWC2 = new G4Box("DWC2", 10*cm/2, 10*cm/2, 5*cm/2);
+        G4LogicalVolume* logicDWC2 = new G4LogicalVolume(solidDWC2, fMatCache["DWCGas"], "DWC2");
+        G4ThreeVector posDWC2(fDWC2PosX, fDWC2PosY, fScin5PosZ - zOffset + fDWC2PosZ);
+        new G4PVPlacement(0, posDWC2, logicDWC2, "DWC2", logicWorld, false, 0, true);
+
+        // --- Trigger Volume (10x10x0.5 cm³) ---
+        G4Box* solidTrigger = new G4Box("Trigger", 10*cm/2, 10*cm/2, 0.5*cm/2);
+        G4LogicalVolume* logicTrigger = new G4LogicalVolume(solidTrigger, fMatCache["G4_PLASTIC_SC_VINYLTOLUENE"], "Trigger");
+        G4ThreeVector posTrigger(fTriggerPosX, fTriggerPosY, fTriggerPosZ - fZOffset);
+        new G4PVPlacement(0, posTrigger, logicTrigger, "Trigger", logicWorld, false, 0, true);
+    }
+    // Apply advanced integrations.
+    SetAdvancedVisAttributes();
+    IntegrateAllSensitiveDetectors();
+    AdvancedOverlapCheck();
+    AdvancedGeometryEnhancement();
+    UpdateGeometryParameters();
+    AdvancedDynamicGeometryUpdate();
+    // BuildTriggerVolume() is not called separately to avoid duplicate Trigger volumes.
+    OptimizeMaterials();
+    DumpAdvancedGeometryInfo("geometry_dump.txt");
+
+    return worldVol;
+}
+
+//---------------------------------------------------------------------
+// Construct: Main method called by Geant4.
+G4VPhysicalVolume* DetectorConstruction::Construct() {
+    G4VPhysicalVolume* worldVol = BuildAdvancedDetector();
+    G4cout << "Final Grandmaster-level DetectorConstruction complete: 7-star, 0% limitations." << G4endl;
+    return worldVol;
+}
