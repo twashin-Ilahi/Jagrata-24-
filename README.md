@@ -1,4 +1,4 @@
-# Jagrata-24-
+# Jagrata-24
 # 🧪 DetectorConstruction – Grandmaster-Level Geant4 Detector Builder
 
 This module defines a **fully dynamic and extensible detector geometry** for a **Relativistic Muon Lifetime Measurements Experiment** using Geant4. It features optimized material handling, modular 3D construction, sensitive detector integration, and advanced visualization/validation features — all at runtime!
